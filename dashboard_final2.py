@@ -205,36 +205,34 @@ if consumption_file and os.path.exists(consumption_file):
     date_col = next((c for c in df_cons.columns if "date" in c.lower()), None)
     meter_col = next((c for c in df_cons.columns if "meter_count" in c.lower() or "meter count" in c.lower()), None)
     loss_col = next((c for c in df_cons.columns if "loss" in c.lower()), None)
-if date_col and meter_col and loss_col:
-    # Remove time from date for clarity
-    df_cons[date_col] = pd.to_datetime(df_cons[date_col]).dt.date
-
-    st.markdown("### 📈 Meter Count and Loss % Trend (Daily)")
-    fig2 = go.Figure()
-    fig2.add_trace(go.Scatter(
-        x=df_cons[date_col], y=df_cons[meter_col],
-        mode='lines+markers', name='Meter Count', line=dict(color='green', width=3)
-    ))
-    fig2.add_trace(go.Scatter(
-        x=df_cons[date_col], y=df_cons[loss_col],
-        mode='lines+markers', name='%Loss_DLP', line=dict(color='orange', width=3), yaxis='y2'
-    ))
-    # Add yaxis2 in layout if dual y-axis is needed
-    fig2['layout']['yaxis2'] = dict(
-        title='%Loss_DLP',
-        titlefont=dict(color='orange'),
-        tickfont=dict(color='orange'),
-        anchor='x',
-        overlaying='y',
-        side='right'
-    )
-    fig2.update_layout(
-        xaxis_title="Date",
-        yaxis_title="Meter Count",
-        title=f"{dtr_selection} Meter Count and Loss % Trend",
-        legend=dict(x=0.5, y=1.1, orientation='h', xanchor='center')
-    )
-    st.plotly_chart(fig2, use_container_width=True)
+    if date_col and meter_col and loss_col:
+            
+        # Remove time from date
+        df_cons[date_col] = pd.to_datetime(df_cons[date_col]).dt.date
+        # Line Chart
+        st.markdown("### 📈 Meter Count and Loss % Trend (Daily)")
+        fig2 = go.Figure()
+        fig2.add_trace(go.Scatter(
+            x=df_cons[date_col], y=df_cons[meter_col],
+            mode='lines+markers', name='Meter Count', line=dict(color='green', width=3)
+        ))
+        fig2.add_trace(go.Scatter(
+            x=df_cons[date_col], y=df_cons[loss_col],
+            mode='lines+markers', name='%Loss_DLP', line=dict(color='orange', width=3), yaxis='y2'
+        ))
+        # Dual y-axis
+        fig2.update_layout(
+            xaxis_title="Date",
+            yaxis=dict(title="Meter Count", titlefont=dict(color='green'), tickfont=dict(color='green')),
+            yaxis2=dict(title="%Loss_DLP", titlefont=dict(color='orange'), tickfont=dict(color='orange'),
+                        anchor="x", overlaying="y", side="right"),
+            legend=dict(x=0.5, y=1.1, orientation='h', xanchor='center'),
+            plot_bgcolor='#282828',
+            paper_bgcolor='#282828',
+            font=dict(color='#f5f6fa'),
+            title=f"{dtr_selection} Meter Count and Loss % Trend"
+        )
+        st.plotly_chart(fig2, use_container_width=True)
         
         # Table below chart
         st.markdown("#### 📋 Daily Meter Count & Loss % Table")
