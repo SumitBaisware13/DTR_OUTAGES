@@ -222,16 +222,15 @@ if consumption_file and os.path.exists(consumption_file):
         ))
         # Dual y-axis
         fig2.update_layout(
-            xaxis_title="Date",
-            yaxis=dict(title="Meter Count", titlefont=dict(color='green'), tickfont=dict(color='green')),
-            yaxis2=dict(title="%Loss_DLP", titlefont=dict(color='orange'), tickfont=dict(color='orange'),
-                        anchor="x", overlaying="y", side="right"),
-            legend=dict(x=0.5, y=1.1, orientation='h', xanchor='center'),
-            plot_bgcolor='#282828',
-            paper_bgcolor='#282828',
-            font=dict(color='#f5f6fa'),
-            title=f"{dtr_selection} Meter Count and Loss % Trend"
-        )
+        xaxis_title="Date",
+        yaxis=dict(title="Meter Count", titlefont=dict(color='green'), tickfont=dict(color='green')),
+        yaxis2=dict(title="%Loss_DLP", titlefont=dict(color='orange'), tickfont=dict(color='orange'),
+                anchor="x", overlaying="y", side="right"),
+        legend=dict(x=0.5, y=1.1, orientation='h', xanchor='center'),
+        # Remove plot_bgcolor and paper_bgcolor if error persists
+        font=dict(color='#222'),  # Simpler color (or remove)
+        title=f"{dtr_selection} Meter Count and Loss % Trend"
+         )
         st.plotly_chart(fig2, use_container_width=True)
         
         # Table below chart
